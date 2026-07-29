@@ -1,6 +1,8 @@
 // src/models/index.js
 const { sequelize } = require('../config/database');
 
+const Role              = require('./Role')(sequelize);
+const Permission        = require('./Permission')(sequelize);
 const Tenant            = require('./Tenant')(sequelize);
 const TenantModule      = require('./TenantModule')(sequelize);
 const User              = require('./User')(sequelize);
@@ -110,6 +112,11 @@ SaleItem.belongsTo(Sale, { foreignKey: 'sale_id', as: 'sale' });
 Product.hasMany(SaleItem, { foreignKey: 'product_id', as: 'saleItems' });
 SaleItem.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
 
+// ─── Role ↔ Permission (many-to-many) ────────────────────────────────────────
+const RolePermission = sequelize.define('role_permissions', {}, { timestamps: false });
+Role.belongsToMany(Permission, { through: RolePermission, foreignKey: 'role_id',       as: 'permissions' });
+Permission.belongsToMany(Role, { through: RolePermission, foreignKey: 'permission_id', as: 'roles' });
+
 // ─── Alert ↔ AlertLog ─────────────────────────────────────────────────────────
 Alert.hasMany(AlertLog, { foreignKey: 'alert_id', as: 'logs' });
 AlertLog.belongsTo(Alert, { foreignKey: 'alert_id', as: 'alert' });
@@ -122,6 +129,8 @@ AlertLog.belongsTo(User, { foreignKey: 'read_by', as: 'reader' });
 
 module.exports = {
   sequelize,
+  Role,
+  Permission,
   Tenant,
   TenantModule,
   User,

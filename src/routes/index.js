@@ -2,8 +2,11 @@
 const express = require('express');
 const router  = express.Router();
 
-router.use('/auth',          require('./auth.routes'));
-router.use('/admin/tenants', require('./tenant.routes'));
+router.use('/auth',                  require('./auth.routes'));
+router.use('/admin/tenants',         require('./tenant.routes'));
+router.use('/admin/agents',          require('./admin.agent.routes'));
+router.use('/admin/utilisateurs',    require('./admin.utilisateurs.routes'));
+router.use('/admin/roles',           require('./admin.roles.routes'));
 router.use('/company',       require('./company.routes'));
 router.use('/sites',      require('./site.routes'));
 router.use('/users',      require('./user.routes'));

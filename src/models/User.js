@@ -2,7 +2,14 @@
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
-const ROLES = ['super_admin', 'tenant_admin', 'manager', 'caissier', 'magasinier', 'auditeur', 'livreur'];
+const ROLES = [
+  'super_admin',
+  'nexalab_support', 'nexalab_commercial', 'nexalab_technique',
+  'tenant_admin', 'manager', 'caissier', 'magasinier', 'auditeur', 'livreur',
+];
+
+const NEXALAB_ROLES = ['super_admin', 'nexalab_support', 'nexalab_commercial', 'nexalab_technique'];
+const TENANT_ROLES  = ['tenant_admin', 'manager', 'caissier', 'magasinier', 'auditeur', 'livreur'];
 
 module.exports = (sequelize) => {
   const User = sequelize.define('users', {
@@ -90,7 +97,9 @@ module.exports = (sequelize) => {
     return values;
   };
 
-  User.ROLES = ROLES;
+  User.ROLES         = ROLES;
+  User.NEXALAB_ROLES = NEXALAB_ROLES;
+  User.TENANT_ROLES  = TENANT_ROLES;
 
   return User;
 };
