@@ -72,15 +72,18 @@ const register = async (data) => {
  * Connexion par téléphone et mot de passe.
  */
 const login = async ({ phone, password }) => {
-  const user = await User.findOne({
-    where: { phone },
-    include: [{ association: 'tenant' }],
-  });
+  const cleanPhone = (phone || '').trim();
+
+  const user = await User.findOne({ where: { phone: cleanPhone } });
 
   if (!user) throw new Error('Numéro ou mot de passe incorrect');
   if (!user.is_active) throw new Error('Compte suspendu. Contactez le support.');
-  if (user.role !== 'super_admin' && user.tenant && !user.tenant.is_active) {
-    throw new Error('Votre organisation est suspendue. Contactez le support.');
+
+  if (user.role !== 'super_admin' && user.tenant_id) {
+    const tenant = await Tenant.findByPk(user.tenant_id);
+    if (tenant && !tenant.is_active) {
+      throw new Error('Votre organisation est suspendue. Contactez le support.');
+    }
   }
 
   const isValid = await user.comparePassword(password);
