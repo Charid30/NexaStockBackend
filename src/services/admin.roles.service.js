@@ -3,11 +3,7 @@ const { Role, Permission } = require('../models');
 
 const listRoles = async (type) => {
   const where = type ? { type } : {};
-  return Role.findAll({
-    where,
-    include: [{ association: 'permissions' }],
-    order:   [['type', 'ASC'], ['label', 'ASC']],
-  });
+  return Role.findAll({ where, order: [['type', 'ASC'], ['label', 'ASC']] });
 };
 
 const getRole = async (id) => {
