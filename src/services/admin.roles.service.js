@@ -1,5 +1,6 @@
 // src/services/admin.roles.service.js
 const { Role, Permission } = require('../models');
+const { invalidatePermissionCache } = require('../middlewares/permission.middleware');
 
 const listRoles = async (type) => {
   const where = type ? { type } : {};
@@ -56,6 +57,7 @@ const setRolePermissions = async (roleId, permissionIds) => {
 
   const perms = await Permission.findAll({ where: { id: permissionIds } });
   await role.setPermissions(perms);
+  invalidatePermissionCache();
 
   return getRolePermissions(roleId);
 };

@@ -1,14 +1,16 @@
-const express    = require('express');
-const router     = express.Router();
-const controller = require('../controllers/sale.controller');
-const { authenticate, authorize } = require('../middlewares/auth.middleware');
-const validate     = require('../middlewares/validate.middleware');
+// src/routes/sale.routes.js
+const express  = require('express');
+const router   = express.Router();
+const ctrl     = require('../controllers/sale.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { checkPermission } = require('../middlewares/permission.middleware');
+const validate = require('../middlewares/validate.middleware');
 const { createSaleSchema } = require('../validators/sale.validator');
 
 router.use(authenticate);
 
-router.get('/',    authorize('tenant_admin', 'manager', 'caissier'), controller.list);
-router.get('/:id', authorize('tenant_admin', 'manager', 'caissier'), controller.getById);
-router.post('/',   authorize('tenant_admin', 'manager', 'caissier'), validate(createSaleSchema), controller.create);
+router.get('/',    checkPermission('ventes', 'read'),   ctrl.list);
+router.get('/:id', checkPermission('ventes', 'read'),   ctrl.getById);
+router.post('/',   checkPermission('ventes', 'create'),  validate(createSaleSchema), ctrl.create);
 
 module.exports = router;
