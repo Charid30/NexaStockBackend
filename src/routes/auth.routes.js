@@ -53,4 +53,6 @@ router.get('/profile', authenticate, controller.getProfile);
  */
 router.patch('/password', authenticate, validate(changePasswordSchema), controller.changePassword);
 
+router.get('/permissions', authenticate, controller.getPermissions);
+
 module.exports = router;

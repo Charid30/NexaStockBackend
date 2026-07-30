@@ -60,4 +60,7 @@ const invalidatePermissionCache = () => {
   _cacheTime = 0;
 };
 
-module.exports = { checkPermission, invalidatePermissionCache };
+/** Retourne le Set de permissions d'un rôle (avec cache). */
+const getUserPermissions = (roleName) => _getPermSet(roleName);
+
+module.exports = { checkPermission, invalidatePermissionCache, getUserPermissions };

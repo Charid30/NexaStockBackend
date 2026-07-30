@@ -1,6 +1,7 @@
 // src/controllers/auth.controller.js
 const authService = require('../services/auth.service');
 const { success, error } = require('../utils/response.util');
+const { getUserPermissions } = require('../middlewares/permission.middleware');
 
 const register = async (req, res) => {
   try {
@@ -56,4 +57,18 @@ const changePassword = async (req, res) => {
   }
 };
 
-module.exports = { register, login, refresh, logout, getProfile, changePassword };
+const getPermissions = async (req, res) => {
+  try {
+    const { role } = req.user;
+    const permSet = await getUserPermissions(role);
+    const data = [...permSet].map((k) => {
+      const [module, action] = k.split('.');
+      return { module, action };
+    });
+    return success(res, data, 'Permissions chargées');
+  } catch (err) {
+    return error(res, 'Erreur lors du chargement des permissions', 500);
+  }
+};
+
+module.exports = { register, login, refresh, logout, getProfile, changePassword, getPermissions };
