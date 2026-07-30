@@ -2,7 +2,7 @@
 const router     = require('express').Router();
 const ctrl       = require('../controllers/admin.agent.controller');
 const { authenticate, authorize } = require('../middlewares/auth.middleware');
-const { validate } = require('../middlewares/validate.middleware');
+const validate = require('../middlewares/validate.middleware');
 const v          = require('../validators/admin.agent.validator');
 
 router.use(authenticate, authorize('super_admin', 'nexalab_technique'));
