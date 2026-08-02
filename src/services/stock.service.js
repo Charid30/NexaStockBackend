@@ -194,10 +194,10 @@ const listMovements = async (tenantId, filters) => {
     offset,
     order:   [['created_at', 'DESC']],
     include: [
-      { association: 'product',         attributes: ['id', 'name', 'reference'] },
-      { association: 'sourceSite',      attributes: ['id', 'name'] },
-      { association: 'destinationSite', attributes: ['id', 'name'] },
-      { association: 'author',          attributes: ['id', 'first_name', 'last_name'] },
+      { association: 'product',         attributes: ['id', 'name', 'reference'],           required: false },
+      { association: 'sourceSite',      attributes: ['id', 'name'],                        required: false },
+      { association: 'destinationSite', attributes: ['id', 'name'],                        required: false },
+      { association: 'author',          attributes: ['id', 'first_name', 'last_name'],     required: false },
     ],
   });
   return { movements: rows, total: count };

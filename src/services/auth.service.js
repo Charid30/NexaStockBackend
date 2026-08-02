@@ -91,6 +91,9 @@ const login = async ({ phone, password }) => {
 
   await user.update({ last_login_at: new Date() });
 
+  const sites = await user.getSites({ attributes: ['id', 'name', 'type'] });
+  user.dataValues.sites = sites;
+
   const accessToken  = generateToken({ id: user.id, tenant_id: user.tenant_id, role: user.role });
   const refreshToken = generateRefreshToken({ id: user.id });
 
